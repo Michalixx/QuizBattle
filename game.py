@@ -27,6 +27,7 @@ class Game:
         self.end = False
         self.time = 60
         self.start_time = -1
+        self.disconnected = False
 
     def get_status(self):
         return self.status

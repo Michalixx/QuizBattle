@@ -31,3 +31,6 @@ class Network:
     def get_player_number(self):
         return self.player_number
 
+    def only_send(self, data):
+        self.client.send(str.encode(data))
+

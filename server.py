@@ -31,7 +31,7 @@ def threaded_client(conn, player_number, game):
             game.start_time = time.time()
 
         if game.get_status() and not game.get_end():
-            game.time = 5 - (time.time() - game.start_time)
+            game.time = 60 - (time.time() - game.start_time)
             if game.time <= 0:
                 game.end = True
 
@@ -40,6 +40,8 @@ def threaded_client(conn, player_number, game):
             if data == "get":
                 replay = game.game_status(player_number)
                 conn.sendall(pickle.dumps(replay))
+            elif data == "disconnect":
+                game.disconnected = True
             elif player_number == 1:
                 game.submit_player1_answer(data)
                 replay = game.game_status(player_number)

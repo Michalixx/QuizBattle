@@ -55,8 +55,12 @@ def draw_gui(player_number, question, inputBox):
 
     time = int(game.get_time())
 
+    enemyColor = (255, 255, 255)
+    if game.disconnected:
+        enemyColor = (255, 0, 0)
+
     myText = result_font.render(str(myScore) + "/" + str(myTotal), True, (255, 255, 255))
-    enemyText = result_font.render(str(enemyScore) + "/" + str(enemyTotal), True, (255, 255, 255))
+    enemyText = result_font.render(str(enemyScore) + "/" + str(enemyTotal), True, enemyColor)
     timeText = result_font.render(str(time), True, (255,255,255))
     text_wrapping(question)
     screen.blit(myText, (5, 5))
@@ -82,7 +86,7 @@ def draw_end_screen(player_number, question):
 
 
     myText = result_font.render(str(myScore) + "/" + str(myTotal), True, (255, 255, 255))
-    enemyText = result_font.render(str(enemyScore) + "/" + str(enemyTotal), True, (255, 255, 255))
+    enemyText = result_font.render(str(enemyScore) + "/" + str(enemyTotal), True, enemyColor)
     endText = question_font.render("Thanks for playing :D", True, (255,255,255))
     screen.blit(myText, (5, 5))
     screen.blit(enemyText, (width - 5 - enemyText.get_width(), 5))
@@ -103,6 +107,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 run = False
+                n.only_send("disconnect")
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_BACKSPACE:
                     print("back")
