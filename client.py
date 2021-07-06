@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from network import Network
 from game import Game
 import pygame as pg
@@ -6,7 +6,7 @@ import pygame as pg
 pg.init()
 width = 1280
 height = 720
-background_color = (139,69,19)
+background_color = (139, 69, 19)
 screen = pg.display.set_mode((width, height))
 pg.display.set_caption("QuizBattle")
 screen.fill(background_color)
@@ -16,13 +16,29 @@ result_font = pg.font.SysFont("comicsansms", 40)
 question_font = pg.font.SysFont("timesnewroman", 50)
 
 
-def text_wrapping(text):  # TODO!!
-    questionText = question_font.render(str(text), True, (255,255,255))
-    screen.blit(questionText, ((width - questionText.get_width())/2, 100))
+def text_wrapping(text):
+    i = 0
+    words = text.split()
+    line  = ""
+    while len(words) > 0:
+        line_backup = line
+        line += words[0]
+        line += " "
+        word_backup = words[0]
+        words.remove(word_backup)
+        lineRender = question_font.render(str(line), True, (255, 255, 255))
+        if lineRender.get_width() > width:
+            lineRender = question_font.render(str(line_backup), True, (255, 255, 255))
+            screen.blit(lineRender, ((width - lineRender.get_width()) / 2, 100+60*i))
+            i += 1
+            line = ""
+            line += word_backup
+    if line != "":
+        lineRender = question_font.render(str(line), True, (255, 255, 255))
+        screen.blit(lineRender, ((width - lineRender.get_width()) / 2, 100 + 60 * i))
 
 
 def draw_gui(player_number, question, game, inputBox):
-
     if player_number == 1:
         myScore = game.player1_correct
         myTotal = game.player1_total
@@ -34,13 +50,13 @@ def draw_gui(player_number, question, game, inputBox):
         enemyScore = game.player1_correct
         enemyTotal = game.player1_total
 
-    myText = result_font.render(str(myScore) + "/" + str(myTotal), True, (255,255,255))
-    enemyText = result_font.render(str(enemyScore) + "/" + str(enemyTotal), True, (255,255,255))
+    myText = result_font.render(str(myScore) + "/" + str(myTotal), True, (255, 255, 255))
+    enemyText = result_font.render(str(enemyScore) + "/" + str(enemyTotal), True, (255, 255, 255))
     text_wrapping(question)
     screen.blit(myText, (5, 5))
-    screen.blit(enemyText, (width-5-enemyText.get_width(), 5))
+    screen.blit(enemyText, (width - 5 - enemyText.get_width(), 5))
     text_surf = result_font.render(inputBox, True, (255, 0, 0))
-    screen.blit(text_surf, ((width - text_surf.get_width())/2, (height - text_surf.get_height())/2))
+    screen.blit(text_surf, ((width - text_surf.get_width()) / 2, (height - text_surf.get_height()) / 2))
 
 
 def main():
@@ -75,16 +91,10 @@ def main():
         if game.get_status():
             draw_gui(player_number, question, game, inputBox)
         else:
-            waitingText = result_font.render("Waiting for opponent...", True, (255,255,255))
-            screen.blit(waitingText, ((width - waitingText.get_width())/2, (height - waitingText.get_height())/2))
+            waitingText = result_font.render("Waiting for opponent...", True, (255, 255, 255))
+            screen.blit(waitingText, ((width - waitingText.get_width()) / 2, (height - waitingText.get_height()) / 2))
 
         pg.display.update()
 
 
-
 main()
-
-
-
-
-
