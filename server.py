@@ -10,7 +10,6 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 player_counter = 0
 game = Game(1)
-print(game)
 
 try:
     s.bind((server, port))
@@ -27,13 +26,16 @@ def threaded_client(conn, player_number):
     while True:
         try:
             data = conn.recv(4096).decode()
-            if player_number == 1:
+            if data == "get":
+                replay = game.game_status(player_number)
+                conn.sendall(pickle.dumps(replay))
+            elif player_number == 1:
                 game.submit_player1_answer(int(data))
-                replay = game.game_status()
+                replay = game.game_status(player_number)
                 conn.sendall(pickle.dumps(replay))
             else:
                 game.submit_player2_answer(int(data))
-                replay = game.game_status()
+                replay = game.game_status(player_number)
                 conn.sendall(pickle.dumps(replay))
         except:
             break

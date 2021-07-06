@@ -1,4 +1,4 @@
-QUESTIONS = [(1, "2+2=", 4), (2, "Jestem kozakiem?", 1)]
+QUESTIONS = [(1, "2+2=", 4), (2, "Jestem kozakiem?", 1), (1, "2+2=", 4), (2, "Jestem kozakiem?", 1), (1, "2+2=", 4), (2, "Jestem kozakiem?", 1), (1, "2+2=", 4), (2, "Jestem kozakiem?", 1), (1, "2+2=", 4), (2, "Jestem kozakiem?", 1), (1, "2+2=", 4), (2, "Jestem kozakiem?", 1), (1, "2+2=", 4), (2, "Jestem kozakiem?", 1), (1, "2+2=", 4), (2, "Jestem kozakiem?", 1), (1, "2+2=", 4), (2, "Jestem kozakiem?", 1)]
 
 class Game:
     def __init__(self, id):

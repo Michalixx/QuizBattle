@@ -25,10 +25,13 @@ def main():
     player_number, question, game = n.data
     print("Waiting for opponent")
     while True:
-        print(game.get_status())
+        try:
+            question, game = n.send("get")
+        except:
+            break
         if game.get_status():
             ans = play_game(player_number, question, game)
-            n.send(ans)
+            question, game = n.send(ans)
 
 main()
 
