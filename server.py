@@ -30,11 +30,11 @@ def threaded_client(conn, player_number):
                 replay = game.game_status(player_number)
                 conn.sendall(pickle.dumps(replay))
             elif player_number == 1:
-                game.submit_player1_answer(int(data))
+                game.submit_player1_answer(data)
                 replay = game.game_status(player_number)
                 conn.sendall(pickle.dumps(replay))
             else:
-                game.submit_player2_answer(int(data))
+                game.submit_player2_answer(data)
                 replay = game.game_status(player_number)
                 conn.sendall(pickle.dumps(replay))
         except:
