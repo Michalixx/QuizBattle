@@ -24,6 +24,9 @@ class Game:
         self.player2_correct = 0
         self.player2_total = 0
         self.status = False
+        self.end = False
+        self.time = 60
+        self.start_time = -1
 
     def get_status(self):
         return self.status
@@ -54,6 +57,18 @@ class Game:
             return (QUESTIONS[self.player1_total][0], self)
         else:
             return (QUESTIONS[self.player2_total][0], self)
+
+    def get_end(self):
+        return self.end
+
+    def get_time(self):
+        return self.time
+
+    def reduce_time(self, i):
+        self.time -= i
+        print("nowy czas: ", self.time)
+        if self.time <= 0:
+            self.end = True
 
 
 load_questions_from_file("question_set_1")

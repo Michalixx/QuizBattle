@@ -2,6 +2,7 @@
 from network import Network
 from game import Game
 import pygame as pg
+import time
 
 pg.init()
 width = 1280
@@ -14,6 +15,7 @@ pg.display.update()
 inputBox = ""
 result_font = pg.font.SysFont("comicsansms", 40)
 question_font = pg.font.SysFont("timesnewroman", 50)
+game = None
 
 
 def text_wrapping(text):
@@ -38,7 +40,8 @@ def text_wrapping(text):
         screen.blit(lineRender, ((width - lineRender.get_width()) / 2, 100 + 60 * i))
 
 
-def draw_gui(player_number, question, game, inputBox):
+def draw_gui(player_number, question, inputBox):
+    global game
     if player_number == 1:
         myScore = game.player1_correct
         myTotal = game.player1_total
@@ -50,20 +53,49 @@ def draw_gui(player_number, question, game, inputBox):
         enemyScore = game.player1_correct
         enemyTotal = game.player1_total
 
+    time = int(game.get_time())
+
     myText = result_font.render(str(myScore) + "/" + str(myTotal), True, (255, 255, 255))
     enemyText = result_font.render(str(enemyScore) + "/" + str(enemyTotal), True, (255, 255, 255))
+    timeText = result_font.render(str(time), True, (255,255,255))
     text_wrapping(question)
     screen.blit(myText, (5, 5))
     screen.blit(enemyText, (width - 5 - enemyText.get_width(), 5))
     text_surf = result_font.render(inputBox, True, (255, 0, 0))
     screen.blit(text_surf, ((width - text_surf.get_width()) / 2, (height - text_surf.get_height()) / 2))
+    screen.blit(timeText, ((width - timeText.get_width()) / 2, 5))
+
+
+def draw_end_screen(player_number, question):
+    global game
+    if player_number == 1:
+        myScore = game.player1_correct
+        myTotal = game.player1_total
+        enemyScore = game.player2_correct
+        enemyTotal = game.player2_total
+    else:
+        myScore = game.player2_correct
+        myTotal = game.player2_total
+        enemyScore = game.player1_correct
+        enemyTotal = game.player1_total
+
+
+
+    myText = result_font.render(str(myScore) + "/" + str(myTotal), True, (255, 255, 255))
+    enemyText = result_font.render(str(enemyScore) + "/" + str(enemyTotal), True, (255, 255, 255))
+    endText = question_font.render("Thanks for playing :D", True, (255,255,255))
+    screen.blit(myText, (5, 5))
+    screen.blit(enemyText, (width - 5 - enemyText.get_width(), 5))
+    screen.blit(endText, ((width - endText.get_width()) / 2, (height - endText.get_height()) / 2))
 
 
 def main():
     global inputBox
+    global game
     n = Network()
     player_number, question, game = n.data
     print("Waiting for opponent")
+    print("I am player", player_number)
 
     run = True
     while run:
@@ -88,8 +120,11 @@ def main():
         except:
             break
 
-        if game.get_status():
-            draw_gui(player_number, question, game, inputBox)
+        if game.get_end():
+            draw_end_screen(player_number, question)
+
+        elif game.get_status():
+            draw_gui(player_number, question, inputBox)
         else:
             waitingText = result_font.render("Waiting for opponent...", True, (255, 255, 255))
             screen.blit(waitingText, ((width - waitingText.get_width()) / 2, (height - waitingText.get_height()) / 2))
