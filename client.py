@@ -2,6 +2,7 @@
 from network import Network
 from game import Game
 import pygame as pg
+import pygame_menu
 import time
 
 pg.init()
@@ -178,6 +179,16 @@ def draw_waiting_for_opponent():
     pg.display.update()
 
 
+def run_menu():
+    menu = pygame_menu.menu.Menu('Welcome', 400, 300, theme=pygame_menu.themes.THEME_BLUE)
+    menu.add.text_input("Name:")
+    menu.add.button("Play", main)
+    menu.add.button('Quit')
+    print('f')
+    menu.mainloop(screen)
+    print('XD')
+
+
 def main():
     global inputBox
     global game
@@ -228,4 +239,5 @@ def main():
     #     pg.display.update()
 
 
-main()
+run_menu()
+print('l')
