@@ -34,3 +34,4 @@ class Network:
     def only_send(self, data):
         self.client.send(str.encode(data))
 
+

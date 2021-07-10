@@ -3,6 +3,7 @@ import random
 QUESTIONS = []
 
 
+
 def generate_question():
     for i in range(100):
         quest = str(i)
@@ -28,6 +29,8 @@ class Game:
         self.time = 60
         self.start_time = -1
         self.disconnected = False
+        self.p1_nick = "a"
+        self.p2_nick = "b"
 
     def get_status(self):
         return self.status
@@ -53,7 +56,7 @@ class Game:
             self.player2_total += 1
             return False
 
-    def game_status(self, player):
+    def game_data(self, player):
         if player == 1:
             return (QUESTIONS[self.player1_total][0], self)
         else:
@@ -67,10 +70,22 @@ class Game:
 
     def reduce_time(self, i):
         self.time -= i
-        print("nowy czas: ", self.time)
         if self.time <= 0:
             self.end = True
+
+    def get_p1nick(self):
+        return self.p1_nick
+
+    def set_p1nick(self, n):
+        self.p1_nick = n
+
+    def get_p2nick(self):
+        return self.p2_nick
+
+    def set_p2nick(self, n):
+        self.p2_nick = n
 
 
 load_questions_from_file("question_set_1")
 generate_question()
+

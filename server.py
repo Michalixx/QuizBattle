@@ -23,10 +23,11 @@ print("Server started.")
 
 
 def threaded_client(conn, player_number, game):
-    conn.send(pickle.dumps((player_number, game.game_status(player_number))))
+    conn.send(pickle.dumps((player_number, game.game_data(player_number))))
+
+    set_nick = False
 
     while True:
-
         if game.get_status() and game.start_time == -1:
             game.start_time = time.time()
 
@@ -38,18 +39,30 @@ def threaded_client(conn, player_number, game):
         try:
             data = conn.recv(4096).decode()
             if data == "get":
-                replay = game.game_status(player_number)
+                replay = game.game_data(player_number)
                 conn.sendall(pickle.dumps(replay))
             elif data == "disconnect":
                 game.disconnected = True
             elif player_number == 1:
-                game.submit_player1_answer(data)
-                replay = game.game_status(player_number)
-                conn.sendall(pickle.dumps(replay))
+                if not set_nick:
+                    game.set_p1nick(data)
+                    set_nick = True
+                    replay = game.game_data(player_number)
+                    conn.sendall(pickle.dumps(replay))
+                else:
+                    game.submit_player1_answer(data)
+                    replay = game.game_data(player_number)
+                    conn.sendall(pickle.dumps(replay))
             else:
-                game.submit_player2_answer(data)
-                replay = game.game_status(player_number)
-                conn.sendall(pickle.dumps(replay))
+                if not set_nick:
+                    game.set_p2nick(data)
+                    set_nick = True
+                    replay = game.game_data(player_number)
+                    conn.sendall(pickle.dumps(replay))
+                else:
+                    game.submit_player2_answer(data)
+                    replay = game.game_data(player_number)
+                    conn.sendall(pickle.dumps(replay))
         except:
             break
 
